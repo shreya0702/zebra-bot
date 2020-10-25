@@ -1,0 +1,4 @@
+.env
+.nimbella/
+packages/default/webhook/virtualenv/
+packages/default/webhook/__deployer__.zip

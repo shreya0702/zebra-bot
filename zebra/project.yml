@@ -1,0 +1,12 @@
+bucket:
+  strip: 1
+
+packages:
+  - name: default
+    actions:
+      - name: webhook
+        runtime: python:3
+        environment: ${<.env}
+      - name: health_check
+        runtime: python:3
+        environment: ${<.env}
