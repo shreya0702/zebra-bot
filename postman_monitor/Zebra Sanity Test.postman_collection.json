@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "52ea4b83-ee31-4f0e-b018-0029a05198e1",
+		"name": "Zebra Sanity Test",
+		"description": "Sanity Test For Zebra Fact Checker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "73f2c5d6-bd18-41a6-8c77-1ca7a3244a6f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"ok\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{team_url}}/api/default/health_check",
+					"host": [
+						"{{team_url}}"
+					],
+					"path": [
+						"api",
+						"default",
+						"health_check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Zebra Webhook API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "599c3e52-3071-4b84-b7fa-c53979391f1f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response should have message object\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('message');",
+							"    pm.expect(jsonData.message).to.be.an('object');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-app-id",
+						"value": "POSTMAN",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": {{webhook_sample_query}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{team_url}}/api/default/webhook",
+					"host": [
+						"{{team_url}}"
+					],
+					"path": [
+						"api",
+						"default",
+						"webhook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Google Fact Check API Sanity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "91f82328-0936-454c-a870-1174473ffc75",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response should have claims array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('claims');",
+							"    pm.expect(jsonData.claims).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{google_fact_check_url}}/claims:search?key={{google_api_key}}&languageCode=en-US&query={{sample_query}}",
+					"host": [
+						"{{google_fact_check_url}}"
+					],
+					"path": [
+						"claims:search"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{google_api_key}}"
+						},
+						{
+							"key": "languageCode",
+							"value": "en-US"
+						},
+						{
+							"key": "query",
+							"value": "{{sample_query}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
